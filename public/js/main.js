@@ -19,27 +19,31 @@ async function loadPokemon() {
 			card.style.width = "475px";
 
 			card.innerHTML = `
-				<img src="${detailsJson.sprites.other['official-artwork'].front_default}" class="card-img-top" />
-				<div class="card-body" style="background-color:#f8f8f8;">
+				<img src="${detailsJson.sprites.other['official-artwork'].front_default}" class="card-img-top " style="background-color:#333" />
+				<div class="card-body pb-3" style="background-color:#f8f8f8;">
 					<h3 class="card-title">${detailsJson.name}</h3>
 				</div>
 		`
 			document.getElementById("pokemonList").appendChild(card);
 		}
 
+		// Increase offset after loading
+		offset += limit;
 	} catch (err) {
 		console.error("failed to load pokemon", err);
 	}
 }
+
+// Initial load
 loadPokemon();
 
-document.addEventListener("scroll", function() {
-	let scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-	let scrollHeight = document.documentElement.scrollHeight || document.body.scrollHeight;
-	let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-	if (scrollTop + clientHeight >= scrollHeight) {
-		offset += limit;
-		loadPokemon()
-	}
-});
+document.getElementById("loadBtn").addEventListener("click", () => {
+	document.getElementById("loadBtn").hidden = true;
+	document.getElementById("loadWheel").removeAttribute("hidden");
 
+	setTimeout(() => {
+		document.getElementById("loadWheel").hidden = true;
+		document.getElementById("loadBtn").hidden = false;
+		loadPokemon();
+	}, 3000)
+});
